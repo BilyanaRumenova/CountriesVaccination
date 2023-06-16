@@ -7,3 +7,7 @@ class Country(BaseModel):
     population: int
     total_vaccinated: int
     percentage_vaccinated: float
+
+
+class CountryGet(Country):
+    id: int

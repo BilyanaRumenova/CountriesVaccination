@@ -14,14 +14,16 @@ def load_data_to_db() -> None:
     con = sqlite3.connect(DB_FILENAME)
     cur = con.cursor()
     try:
-        cur.execute("""CREATE TABLE countries
-                       (id int PRIMARY KEY AUTOINCREMENT , name text, iso_code text, population int, total_vaccinated int, percentage_vaccinated real)""")
+        cur.execute("""CREATE TABLE IF NOT EXISTS countries
+                       (id integer PRIMARY KEY AUTOINCREMENT , name text, iso_code text, population int, 
+                       total_vaccinated int, percentage_vaccinated real)""")
         cur.execute("""INSERT INTO countries
                        (name, iso_code, population, total_vaccinated, percentage_vaccinated) VALUES
                        ('United States of America', 'USA', '328329953', '12', '0.00000365485'),
                        ('Brazilia','BRA','92746607','5000','0.00539103279'),
                        ('Holland','HOL','17441139','10000','0.05733570496 '),
                        ('Central Europe and the Baltics','OWID_CEB','102253057','500000','0.48898293573 ')""")
+
         # cur.execute("""CREATE TABLE country_populations
         #                 (id int PRIMARY KEY AUTOINCREMENT , country_name text, country_code text,
         #                 indicator text, indicator_code text , '1960' int , '1961' int, '1962' int, '1963' int,
@@ -40,14 +42,13 @@ def load_data_to_db() -> None:
         print("Table already exists")
 
 
-def check_table_exists() -> bool:
-    conn = sqlite3.connect(DB_FILENAME)
-    cursor = conn.cursor()
-    x = cursor.execute("""
-    SELECT * FROM countries WHERE name='Brazilia' AND iso_code='BRA'
-    """)
-    return cursor.fetchone()
-
+# def check_table_exists() -> bool:
+#     conn = sqlite3.connect(DB_FILENAME)
+#     cursor = conn.cursor()
+#     cursor.execute("SELECT 1 FROM countries LIMIT 1")
+#     if cursor.fetchone()[0] == 1:
+#         cursor.close()
+#         return True
 
 
 # def load_csv_to_db() -> None:

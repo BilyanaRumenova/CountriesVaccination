@@ -8,6 +8,8 @@ authors = ["BilyanaRumenova <bil.konstantinova@gmail.com>"]
 python = "^3.9"
 pytest = "^7.3.2"
 pandas = "^2.0.2"
+httpx = "^0.24.1"
+sqlmodel = "^0.0.8"
 
 [tool.poetry.dev-dependencies]
 

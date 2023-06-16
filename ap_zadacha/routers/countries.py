@@ -1,36 +1,45 @@
 from typing import List
 
 from fastapi import APIRouter, status, HTTPException
+from fastapi.responses import JSONResponse
 
 from ap_zadacha.components.schemas import Country
-from ap_zadacha.routers.utils import get_all_countries_data, get_single_country_data
+from ap_zadacha.routers.utils import get_all_countries_data, delete_country_data, \
+    add_country_to_db, get_country_by_id, get_country_by_name
 
 router = APIRouter()
 
 
-# status code 201, descr = add new country to the database, has request body
-@router.post('/country')
-async def create_country():
-    pass
-
-
-# status code 201, descr = delete the selected country using country ID, response = record was successfully deleted
-@router.delete('/country/{country_id}')
-async def delete_country():
-    pass
-
-
-# status code 200, descr = list of all countries and their vaccinations or filter using query, returns list
-@router.get('/vaccinations', status_code=status.HTTP_200_OK, description='list of all countries and their vaccinations')
-async def get_all_vaccinations() -> List[Country]:
-    """Returns a list with information of all countries and data about their vaccinations."""
+@router.get('/vaccinations', status_code=status.HTTP_200_OK)
+async def get_all_countries() -> List[Country]:
+    """Returns a list of all countries and their vaccination data."""
     countries_data = get_all_countries_data()
     return countries_data
 
 
-# status code 200, descr = retrieve information about specific country using the country ID, response returns list
 @router.get('/vaccinations/country/{country_id}', status_code=status.HTTP_200_OK)
-async def get_country_data(country_id) -> Country:
+async def get_country_data(country_id: int) -> Country:
     """Retrieve information about specific country through the provided country ID"""
-    country_data = get_single_country_data(country_id)
+    country_data = get_country_by_id(country_id)
+    if not country_data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Country not found')
     return country_data
+
+
+@router.post('/country')
+async def create_country(payload: Country):
+    """Add new country to the database. Raises error if country with the same name already exists"""
+    if get_country_by_name(payload.name):
+        raise HTTPException(detail='Country already exists',
+                            status_code=status.HTTP_409_CONFLICT)
+    await add_country_to_db(payload)
+    return JSONResponse(status_code=status.HTTP_201_CREATED, content='Created')
+
+
+@router.delete('/country/{country_id}')
+async def delete_country(country_id: int):
+    """Delete the selected country using country ID. Raises error if country does not exist"""
+    if not get_country_by_id(country_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Country not found')
+    await delete_country_data(country_id)
+    return JSONResponse(status_code=status.HTTP_201_CREATED, content='Record was successfully deleted')
