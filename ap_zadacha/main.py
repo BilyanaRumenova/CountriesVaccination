@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 import uvicorn
 
-from ap_zadacha.routers.countries import router
+from ap_zadacha.routers import countries
+from ap_zadacha.routers import injection
 
 app = FastAPI()
 
-app.include_router(router=router)
+app.include_router(router=countries.router)
+app.include_router(router=injection.router)
 
 
 if __name__ == '__main__':
