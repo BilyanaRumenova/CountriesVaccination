@@ -9,10 +9,10 @@ def get_all_countries_data() -> List[Country]:
     data = []
     with CountriesDatabase(DB_FILENAME) as cursor:
         cursor.execute('''SELECT * FROM countries''')
-        countries_data = cursor.fetchall()
-        for country in countries_data:
+        result = cursor.fetchall()
+        for country in result:
             data.append(Country(**country))
-    return data
+        return data
 
 
 def get_country_by_id(country_id) -> Country:

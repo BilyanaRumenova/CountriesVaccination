@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, condecimal
 
 
 class Country(BaseModel):
@@ -8,6 +8,16 @@ class Country(BaseModel):
     total_vaccinated: int
     percentage_vaccinated: float
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "name": "Chile",
+                "iso_code": "CHL",
+                "population": 19116209,
+                "total_vaccinated": 17283367,
+                "percentage_vaccinated": 90.41,
+            }
+        }
 
 class CountryGet(Country):
     id: int

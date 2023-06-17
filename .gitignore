@@ -20,9 +20,6 @@ dist/
 
 # JetBrains IDE
 .idea/
-.venv
-__pycache__
-
 
 # Unit test reports
 TEST*.xml
@@ -48,3 +45,6 @@ Thumbs.db
 
 *.zip
 
+/.pytest_cache
+/.venv
+.idea
