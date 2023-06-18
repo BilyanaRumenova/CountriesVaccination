@@ -1,4 +1,4 @@
-from pydantic import BaseModel, condecimal
+from pydantic import BaseModel
 
 
 class Country(BaseModel):
@@ -18,6 +18,3 @@ class Country(BaseModel):
                 "percentage_vaccinated": 90.41,
             }
         }
-
-class CountryGet(Country):
-    id: int
