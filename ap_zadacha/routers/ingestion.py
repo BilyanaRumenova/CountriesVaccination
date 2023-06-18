@@ -8,7 +8,7 @@ router = APIRouter()
 
 @router.post("/import", status_code=status.HTTP_201_CREATED)
 async def import_data_from_csv() -> dict:
-    """Import data extracted from csv files into already created table countries"""
+    """Import data extracted from CSV files into already created table `countries`"""
     country_populations = await extract_country_population()
     vaccinations = await extract_country_vaccination_data()
 
@@ -31,7 +31,7 @@ async def import_data_from_csv() -> dict:
     return {"message": "Data imported successfully"}
 
 
-async def extract_country_population():
+async def extract_country_population() -> dict:
     """Read the CSV file and extract the required data(country name, country code and population for 2020)
     from the country_populations.csv """
     country_populations = {}
@@ -46,7 +46,7 @@ async def extract_country_population():
     return country_populations
 
 
-async def extract_country_vaccination_data():
+async def extract_country_vaccination_data() -> dict:
     """Read the CSV file and extract the required data from the vaccinations.csv"""
     vaccinations = {}
     with open("data/vaccinations.csv", "r") as file:
