@@ -1,12 +1,6 @@
-from pathlib import Path
 import sqlite3
 
 DB_FILENAME = "./countries.db"
-
-
-def init_db(filename: str = DB_FILENAME) -> None:
-    if not Path(filename).is_file():
-        Path(filename).touch()
 
 
 def load_initial_data_to_db() -> None:
