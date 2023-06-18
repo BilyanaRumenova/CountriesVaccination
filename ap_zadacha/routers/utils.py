@@ -15,25 +15,17 @@ def get_all_countries_data() -> List[Country]:
         return data
 
 
-def get_country_by_id(country_id) -> Country:
+def get_country_by_id(country_id: str) -> Country:
     with CountriesDatabase(DB_FILENAME) as cursor:
-        cursor.execute('''SELECT * FROM countries WHERE id = ?''', (country_id,))
+        cursor.execute('''SELECT * FROM countries WHERE iso_code = ?''', (country_id,))
         country_data = cursor.fetchone()
         if country_data:
             return Country(**country_data)
 
 
-def get_country_by_name(country_name) -> CountryGet:
+async def delete_country_data(country_id: str) -> None:
     with CountriesDatabase(DB_FILENAME) as cursor:
-        cursor.execute('''SELECT * FROM countries WHERE name = ?''', (country_name,))
-        country_data = cursor.fetchone()
-        if country_data:
-            return CountryGet(**country_data)
-
-
-async def delete_country_data(country_id) -> None:
-    with CountriesDatabase(DB_FILENAME) as cursor:
-        cursor.execute('''DELETE FROM countries WHERE id = ?''', (country_id,))
+        cursor.execute('''DELETE FROM countries WHERE iso_code = ?''', (country_id,))
 
 
 async def add_country_to_db(payload: Country):
