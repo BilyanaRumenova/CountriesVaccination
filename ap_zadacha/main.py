@@ -2,7 +2,6 @@ from fastapi import FastAPI
 import uvicorn
 
 from ap_zadacha.db.database_utils import CountriesDatabase
-from ap_zadacha.db.prepare import DB_FILENAME
 from ap_zadacha.routers import countries
 from ap_zadacha.routers import injection
 
@@ -12,11 +11,11 @@ app.include_router(router=countries.router)
 app.include_router(router=injection.router)
 
 
-# Event handler to check if table countries exists and if not - creates and populates it with the
-# initial values on app startup
 @app.on_event("startup")
 async def startup_event():
-    CountriesDatabase(DB_FILENAME)
+    """Event handler to check if table countries exists and if not - creates and populates it with the initial
+    values on app startup"""
+    CountriesDatabase()
     print("Table populated")
 
 
