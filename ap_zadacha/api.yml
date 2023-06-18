@@ -56,7 +56,7 @@ paths:
           schema:
             type: string
       responses:
-        "201":
+        "200":
           description: record was successfully deleted
 
 components:

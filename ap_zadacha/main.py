@@ -3,12 +3,12 @@ import uvicorn
 
 from ap_zadacha.db.database_utils import CountriesDatabase
 from ap_zadacha.routers import countries
-from ap_zadacha.routers import injection
+from ap_zadacha.routers import ingestion
 
 app = FastAPI()
 
 app.include_router(router=countries.router)
-app.include_router(router=injection.router)
+app.include_router(router=ingestion.router)
 
 
 @app.on_event("startup")
