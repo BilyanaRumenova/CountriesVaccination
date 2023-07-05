@@ -6,7 +6,7 @@ class Config:
 
     @staticmethod
     def get_database_file():
-        if Config.ENVIRONMENT == 'testing':
+        if os.environ.get('ENVIRONMENT') == 'testing':
             return 'testing.db'
         else:
             return 'countries.db'

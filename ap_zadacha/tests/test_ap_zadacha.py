@@ -12,7 +12,7 @@ client = TestClient(app)
 
 
 @pytest.fixture
-def setup_test_database(request):
+def setup_test_database():
     os.environ['ENVIRONMENT'] = 'testing'
     with CountriesDatabase() as cursor:
         # Remove existing data from the table
@@ -28,14 +28,6 @@ def setup_test_database(request):
             )
             """
         )
-        cursor.connection.commit()
-    request.addfinalizer(drop_test_database_table)
-
-
-def drop_test_database_table():
-    with CountriesDatabase() as cursor:
-        cursor.execute("DROP TABLE IF EXISTS countries")
-        cursor.connection.commit()
 
 
 def test_version():
@@ -58,7 +50,6 @@ def test_get_all_countries_non_empty_list(setup_test_database):
             ('BRA', 'Brazilia', '92746607','5000','0.00539103279')
             """
         )
-        cursor.connection.commit()
     response = client.get("/vaccinations")
     assert response.status_code == status.HTTP_200_OK
     assert type(response.json()) == list
@@ -73,7 +64,6 @@ def test_get_country_by_id_success(setup_test_database):
             ('USA', 'United States of America', '328329953', '12', '0.00000365485')
             """
         )
-        cursor.connection.commit()
     country_id = 'USA'
     response = client.get(f"/vaccinations/country/{country_id}")
     assert response.status_code == status.HTTP_200_OK
@@ -120,7 +110,6 @@ def test_create_country_already_exists_raises_error(setup_test_database):
             ('BGR', 'Bulgaria', '6900000', '4300000', '0.00000365485')
             """
         )
-        cursor.connection.commit()
     payload = {
         "name": "Bulgaria",
         "iso_code": "BGR",
@@ -165,7 +154,6 @@ def test_delete_country_success(setup_test_database):
             ('USA', 'United States of America', '328329953', '12', '0.00000365485')
             """
         )
-        cursor.connection.commit()
     country_id = 'USA'
     response = client.delete(f"/country/{country_id}")
     assert response.status_code == status.HTTP_200_OK
